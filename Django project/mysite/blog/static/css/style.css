@@ -1,0 +1,9 @@
+.main_header {
+    background: url(../media/img/duck.jpg)
+}
+
+.box_frame {
+    margin: 5%;
+    background: #ffffff
+    opacity: 0.6
+}
