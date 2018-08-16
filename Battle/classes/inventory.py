@@ -1,7 +1,7 @@
 class Item:
-    def __init__(self, name, type, description, prop):
+    def __init__(self, name, style, description, prop):
         self.name = name
-        self.type = type
+        self.style = style
         self.description = description
         self.prop = prop
 

@@ -31,15 +31,16 @@ enemy_spells3 = [curaga, meteor, thunder]
 player_items = [{"item": potion, "quantity": 15}, {"item": hipotion, "quantity": 5},
                 {"item": superpotion, "quantity": 5}, {"item": elixer, "quantity": 5},
                 {"item": megaelixer, "quantity": 2}, {"item": grenade, "quantity": 5}]
+enemy_items = [{"item": potion, "quantity": 2}]
 
 # Instantiate People
 player1 = Person("T-Wizzle ", 3260, 132, 300, 34, player_spells, player_items)
 player2 = Person("C3-BPO   ", 4160, 188, 311, 34, player_spells, player_items)
 player3 = Person("Lizard   ", 3089, 174, 288, 34, player_spells, player_items)
 
-enemy1 = Person("Blood-Imp           ", 1000, 100, 450, 325, enemy_spells1, [])
-enemy2 = Person("Zargoth-the-Terrible", 11200, 221, 615, 25, enemy_spells3, [])
-enemy3 = Person("Ice-Imp             ", 800, 200, 250, 270, enemy_spells2, [])
+enemy1 = Person("Blood-Imp           ", 1000, 100, 450, 325, enemy_spells1, enemy_items)
+enemy2 = Person("Zargoth-the-Terrible", 11200, 221, 615, 25, enemy_spells3, enemy_items)
+enemy3 = Person("Ice-Imp             ", 800, 200, 250, 270, enemy_spells2, enemy_items)
 
 players = [player1, player2, player3]
 enemies = [enemy1, enemy2, enemy3]
@@ -98,10 +99,10 @@ while running:
 
             player.reduce_mp(spell.cost)
 
-            if spell.type == "white":
+            if spell.style == "white":
                 player.heal(magic_dmg)
                 print(Bcolours.OKBLUE + "\n" + spell.name + " heals for", str(magic_dmg), "HP." + Bcolours.ENDC)
-            elif spell.type == "black":
+            elif spell.style == "black":
                 enemy = player.choose_target(enemies)
                 enemies[enemy].take_damage(magic_dmg)
                 print(Bcolours.OKBLUE + "\n" + spell.name + " deals", str(magic_dmg), "points of damage to " +
@@ -127,10 +128,10 @@ while running:
 
             player.items[item_choice]["quantity"] -= 1
 
-            if item.type == "potion":
+            if item.style == "potion":
                 player.heal(item.prop)
                 print(Bcolours.OKGREEN + "\n" + item.name + " heals for", str(item.prop), "HP" + Bcolours.ENDC)
-            elif item.type == "elixer":
+            elif item.style == "elixer":
 
                 if item.name == "Mega Elixer":
                     for i in players:
@@ -141,7 +142,7 @@ while running:
                     player.mp = player.maxmp
                 print(Bcolours.OKGREEN + "\n" + item.name + " fully restores HP/MP" + Bcolours.ENDC)
 
-            elif item.type == "attack":
+            elif item.style == "attack":
                 enemy = player.choose_target(enemies)
                 enemies[enemy].take_damage(item.prop)
                 enemy.take_damage(item.prop)
@@ -176,7 +177,8 @@ while running:
 
 # Enemy attack phase
     for enemy in enemies:
-        enemy_choice = random.randrange(0, 2)
+        enemy_choice = 0
+        # removed random.randrange(0,1)1
 
         if enemy_choice == 0:
             # Choose attack
@@ -186,24 +188,24 @@ while running:
             players[target].take_damage(enemy_dmg)
             print(enemy.name.replace(" ", "") + " attacks " + players[target].name.replace(" ", "") + " for", enemy_dmg)
 
-        elif enemy_choice == 1:
-            spell, magic_dmg = enemy.choose_enemy_spell()
-            enemy.reduce_mp(spell.cost)
+        # elif enemy_choice == 1:
+        #     magic_choice = random.randrange(0, len(enemy.magic))
+        #     magic_dmg = spell.generate_damage
+        #
+        #     if spell.style == "white":
+        #         enemy.heal(magic_dmg)
+        #         print(Bcolours.OKBLUE + spell.name + " heals " + enemy.name + " for", str(magic_dmg),
+        #               "HP." + Bcolours.ENDC)
+        #     elif spell.style == "black":
+        #
+        #         target = random.randrange(0, 3)
+        #
+        #         players[target].take_damage(magic_dmg)
+        #
+        #         print(Bcolours.OKBLUE + "\n" + enemy.name.replace(" ", "") + "'s " + spell.name + " deals",
+        #               str(magic_dmg), "points of damage to " + players[target].name.replace(" ", "") + Bcolours.ENDC)
 
-            if spell.type == "white":
-                enemy.heal(magic_dmg)
-                print(Bcolours.OKBLUE + spell.name + " heals " + enemy.name + " for", str(magic_dmg),
-                      "HP." + Bcolours.ENDC)
-            elif spell.type == "black":
-
-                target = random.randrange(0, 3)
-
-                players[target].take_damage(magic_dmg)
-
-                print(Bcolours.OKBLUE + "\n" + enemy.name.replace(" ", "") + "'s " + spell.name + " deals",
-                      str(magic_dmg), "points of damage to " + players[target].name.replace(" ", "") + Bcolours.ENDC)
-
-                if players[target].get_hp() == 0:
+            if players[target].get_hp() == 0:
                     print(players[target].name.replace(" ", "") + " has died.")
                     del players[target]
 

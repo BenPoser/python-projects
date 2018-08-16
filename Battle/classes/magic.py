@@ -2,11 +2,11 @@ import random
 
 
 class Spell:
-    def __init__(self, name, cost, dmg, type):
+    def __init__(self, name, cost, dmg, style):
         self.name = name
         self.cost = cost
         self.dmg = dmg
-        self.type = type
+        self.style = style
 
     def generate_damage(self):
         low = self.dmg - 15
